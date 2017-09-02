@@ -1,9 +1,10 @@
-#Jawaban Soal
+# Jawaban Soal
+File disini berhubungan dengan isi file **PraPraktikum 2**
 
-Soal 1 : point.c
+Soal 1 : **point.c**
 
-Soal 2 : jam.c
+Soal 2 : **jam.c**
 
-Soal 3 : mjam.c
+Soal 3 : **mjam.c**
 
-Soal 4 : garis.c
+Soal 4 : **garis.c**
