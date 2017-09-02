@@ -1,5 +1,5 @@
 # Jawaban Soal
-File disini berhubungan dengan isi file **PraPraktikum 2**
+File disini berhubungan dengan isi folder **PraPraktikum 2**
 
 Soal 1 : **point.c**
 
