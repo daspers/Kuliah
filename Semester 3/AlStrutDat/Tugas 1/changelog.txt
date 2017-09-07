@@ -2,7 +2,7 @@
 from original array.h
 
 deleted define:
-- IdxMax changed
+- IdxMax -> IdxMax(T)
 
 changed define:
 - add MaxEl(T)
