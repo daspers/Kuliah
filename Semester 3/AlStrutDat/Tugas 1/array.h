@@ -10,6 +10,8 @@
 #include "boolean.h"
 
 /*  Kamus Umum */
+#define IdxMax(T) (MaxEl(T)+IdxMin-1)
+/* Indeks maksimum array */
 #define IdxMin 1
 /* Indeks minimum array */
 #define IdxUndef -999 
@@ -39,7 +41,7 @@ typedef struct {
 #define Neff(T)   (T).Neff
 #define TI(T)     (T).TI
 #define Elmt(T,i) (T).TI[(i)]
-#define MaxEl(T,i) (T).MaxEl
+#define MaxEl(T) (T).MaxEl
 
 /* ********** KONSTRUKTOR ********** */
 /* Konstruktor : create tabel kosong  */
