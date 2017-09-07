@@ -1,0 +1,20 @@
+#Change Log
+from original array.h
+
+deleted define:
+- IdxMax
+
+changed define:
+- add MaxEl(T)
+
+changed struct
+- add MaxEl
+- TI[] -> *TI
+
+changed function
+Konstruktor
+- MakeEmpty changed
+- Dealokasi Added
+
+I/O
+- BacaMaxTabel added
