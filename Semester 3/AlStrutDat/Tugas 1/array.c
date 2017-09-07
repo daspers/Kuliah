@@ -62,7 +62,7 @@ boolean IsIdxValid (TabInt T, IdxType i)
 /* Mengirimkan true jika i adalah indeks yang valid utk ukuran tabel */
 /* yaitu antara indeks yang terdefinisi utk container, yaitu IdxMin..MaxEl*/
 {	//Algoritma
-	return (GetFirstIdx(T)<=i)&&(i>=MaxEl(T)+IdxMin-1);
+	return (GetFirstIdx(T)<=i)&&(i<=IdxMax(T));
 }
 
 boolean IsIdxEff (TabInt T, IdxType i)
@@ -124,7 +124,7 @@ void BacaIsi (TabInt * T)
 	//Algorima
 	do{
 		scanf("%d",&N);
-	}while((N<0)||(N>MaxEl(*T)+IdxMin-1));
+	}while((N<0)||(N>IdxMax(*T)));
 	Neff(*T) = N;
 	for(i=GetFirstIdx(*T);i<=GetLastIdx(*T);i++){
 		scanf("%d", &Elmt(*T,i));
@@ -143,7 +143,7 @@ void BacaIsiTab (TabInt * T)
 	//Algoritma
 	Neff(*T)=0;
 	scanf("%d", &temp);
-	while(temp!=-9999&&Neff(*T)<MaxEl(*T)+IdxMin-1){
+	while(temp!=-9999&&Neff(*T)<IdxMax(*T)){
 		Neff(*T)+=1;
 		Elmt(*T,GetLastIdx(*T))=temp;
 		scanf("%d", &temp);
@@ -168,7 +168,7 @@ void TulisIsi (TabInt T)
 	if(IsEmpty(T))
 		printf("Tabel kosong\n");
 	else{
-		for(i=IdxMin;i<=GetLastIdx(T);i++){
+		for(i=GetFirstIdx(T);i<=GetLastIdx(T);i++){
 			printf("[%d]%d\n",i,Elmt(T,i));
 		}
 	}
@@ -186,7 +186,7 @@ void TulisIsiTab (TabInt T)
 	IdxType i;
 	//Algoritma
 	printf("[");
-	for(i=IdxMin;i<=GetLastIdx(T);i++){
+	for(i=GetFirstIdx(T);i<=GetLastIdx(T);i++){
 		printf("%d",Elmt(T,i));
 		if(i<GetLastIdx(T))
 			printf(",");
@@ -219,7 +219,7 @@ TabInt MinusTab (TabInt T1, TabInt T2)
 	IdxType i;
 	//Algoritma
 	Neff(T3)=Neff(T1);
-	for(i=IdxMin;i<=IdxMin+Neff(T1)-1;i++){
+	for(i=GetFirstIdx(T);i<=GetLastIdx(T1);i++){
 		Elmt(T3,i)=Elmt(T1,i)-Elmt(T2,i);
 	}
 	return T3;
@@ -233,7 +233,7 @@ TabInt KaliTab (TabInt T1, TabInt T2)
 	IdxType i;
 	//Algoritma
 	Neff(T3)=Neff(T1);
-	for(i=IdxMin;i<=IdxMin+Neff(T1)-1;i++){
+	for(i=GetFirstIdx(T);i<=GetLastIdx(T1);i++){
 		Elmt(T3,i)=Elmt(T1,i)*Elmt(T2,i);
 	}
 	return T3;
@@ -246,7 +246,7 @@ TabInt KaliKons (TabInt Tin, ElType c)
 {	//Kamus
 	IdxType i;
 	//Algoritma
-	for(i=IdxMin;i<=IdxMin+Neff(Tin)-1;i++){
+	for(i=GetFirstIdx(T);i<=GetLastIdx(Tin);i++){
 		Elmt(Tin,i)*=c;
 	}
 	return Tin;
@@ -261,7 +261,7 @@ boolean IsEQ (TabInt T1, TabInt T2)
 	IdxType i;
 	//Algoritma
 	if(NbElmt(T1)==NbElmt(T2)){
-		for(i=IdxMin;i<=IdxMin+Neff(T1)-1;i++){
+		for(i=GetFirstIdx(T);i<=GetLastIdx(T1);i++){
 			if(Elmt(T1,i)!=Elmt(T2,i))
 				return false;
 		}
@@ -296,7 +296,7 @@ IdxType Search1 (TabInt T, ElType X)
 {	//Kamus
 	IdxType i;
 	//Algoritma
-	for(i=IdxMin;i<=IdxMin+Neff(T)-1;i++){
+	for(i=GetFirstIdx(T);i<=GetLastIdx(T);i++){
 		if(Elmt(T,i)==X)
 			return i;
 	}
@@ -313,7 +313,7 @@ IdxType Search2 (TabInt T, ElType X)
 	IdxType i;
 	boolean found=false;
 	//Algoritma
-	for(i=IdxMin;i<=IdxMin+Neff(T)-1&&!found;i++){
+	for(i=GetFirstIdx(T);i<=GetLastIdx(T)&&!found;i++){
 		found=Elmt(T,i)==X;
 	}
 	return (found?i-1:IdxUndef);
@@ -327,7 +327,7 @@ boolean SearchB (TabInt T, ElType X)
 	IdxType i;
 	boolean found=false;
 	//Algoritma
-	for(i=IdxMin;i<=IdxMin+Neff(T)-1&&!found;i++){
+	for(i=GetFirstIdx(T);i<=GetLastIdx(T)&&!found;i++){
 		found=Elmt(T,i)==X;
 	}
 	return found;
@@ -341,9 +341,10 @@ boolean SearchSentinel (TabInt T, ElType X)
    yang tidak dipakai dalam definisi tabel */
 {	//Kamus
 	IdxType i;
-	Elmt(T,IdxMin+Neff(T)) = X;
-	for(i=IdxMin;Elmt(T,i)!=X;i++);
-	return i<IdxMin+Neff(T);
+	//Algortima
+	Elmt(T,GetLastIdx(T)+1) = X;
+	for(i=GetFirstIdx(T);Elmt(T,i)!=X;i++);
+	return i<=GetLastIdx(T);
 }
 
 /* ********** NILAI EKSTREM ********** */
@@ -355,7 +356,7 @@ ElType ValMax (TabInt T)
 	ElType maks;
 	//Algoritma
 	maks=Elmt(T,IdxMin);
-	for(i=IdxMin+1;i<=IdxMin+Neff(T)-1;i++){
+	for(i=GetFirstIdx(T)+1;i<=GetLastIdx(T);i++){
 		if(Elmt(T,i)>maks)
 			maks=Elmt(T,i);
 	}
@@ -371,7 +372,7 @@ ElType ValMin (TabInt T)
 	ElType minimum;
 	//Algoritma
 	minimum=Elmt(T,IdxMin);
-	for(i=IdxMin+1;i<=IdxMin+Neff(T)-1;i++){
+	for(i=GetFirstIdx(T)+1;i<=GetLastIdx(T);i++){
 		if(Elmt(T,i)<minimum)
 			minimum=Elmt(T,i);
 	}
@@ -402,7 +403,7 @@ void CopyTab (TabInt Tin, TabInt * Tout)
 	IdxType i;
 	//Algoritma
 	Neff(*Tout)=Neff(Tin);
-	for(i=IdxMin;i<=IdxMin+Neff(Tin)-1;i++){
+	for(i=GetFirstIdx(Tin);i<=GetLastIdx(Tin);i++){
 		Elmt(*Tout, i)=Elmt(Tin,i);
 	}
 }
@@ -417,8 +418,8 @@ TabInt InverseTab (TabInt T)
 	TabInt T2;
 	//Algoritma
 	Neff(T2)=Neff(T);
-	for(i=IdxMin;i<=IdxMin+Neff(T)-1;i++){
-		Elmt(T2, i)=Elmt(T,IdxMin+Neff(T)-i);
+	for(i=GetFirstIdx(T);i<=GetLastIdx(T);i++){
+		Elmt(T2, i)=Elmt(T,GetLastIdx(T)+1-i);
 	}
 	return T2;
 }
@@ -450,7 +451,7 @@ void MaxSortDesc (TabInt * T)
 	IdxType i,j, itemp;
 	ElType temp;
 	//Algoritma
-	for(i=IdxMin;i<GetLastIdx(*T);i++){
+	for(i=GetFirstIdx(T);i<GetLastIdx(*T);i++){
 		itemp=i;
 		for(j=i+1;j<=GetLastIdx(*T);j++){
 			if(Elmt(*T,itemp)<Elmt(*T,j))
@@ -473,7 +474,7 @@ void InsSortAsc (TabInt * T)
 	IdxType i,j;
 	ElType temp;
 	//Algoritma
-	for(i=IdxMin+1;i<IdxMin+Neff(*T)-1;i++){
+	for(i=GetFirstIdx(T)+1;i<GetLastIdx(*T);i++){
 		for(j=i;j>IdxMin&&Elmt(*T,j-1)>Elmt(*T,j);j--){
 			temp=Elmt(*T,j-1);
 			Elmt(*T,j-1)=Elmt(*T,j);
@@ -490,7 +491,7 @@ void AddAsLastEl (TabInt * T, ElType X)
 /* I.S. Tabel T boleh kosong, tetapi tidak penuh */
 /* F.S. X adalah elemen terakhir T yang baru */
 {	//Algoritma
-	Elmt(*T, IdxMin+Neff(*T))=X;
+	Elmt(*T, GetLastIdx(*T)+1)=X;
 	Neff(*T)+=1;
 }
 
@@ -505,7 +506,7 @@ void AddEli (TabInt * T, ElType X, IdxType i)
 {	//Kamus
 	IdxType j;
 	//Algoritma
-	for(j=IdxMin+Neff(*T); j>i;j--){
+	for(j=GetLastIdx(*T)+1; j>i;j--){
 		Elmt(*T,j)=Elmt(*T,j-1);
 	}
 	Neff(*T)+=1;
@@ -521,7 +522,7 @@ void DelLastEl (TabInt * T, ElType * X)
 /*      Banyaknya elemen tabel berkurang satu */
 /*      Tabel T mungkin menjadi kosong */
 {
-	*X=Elmt(*T,IdxMin+Neff(*T)-1);
+	*X=Elmt(*T,GetLastIdx(*T));
 	Neff(*T)-=1;
 }
 
@@ -538,7 +539,7 @@ void DelEli (TabInt * T, IdxType i, ElType * X)
 	//Algoritma
 	*X=Elmt(*T, i);
 	Neff(*T)-=1;
-	for(j=i;j<IdxMin+Neff(*T);j++){
+	for(j=i;j<=GetLastIdx(*T);j++){
 		Elmt(*T,j)=Elmt(*T,j+1);
 	}
 }
@@ -557,7 +558,7 @@ void AddElUnik (TabInt * T, ElType X)
 /*          Kemudian tambahkan elemen jika belum ada */
 {	//Algoritma
 	if(!SearchSentinel(*T,X)){
-		Elmt(*T,IdxMin+Neff(*T))=X;
+		Elmt(*T,GetLastIdx(*T)+1)=X;
 		Neff(*T)+=1;
 	}
 	else
@@ -574,7 +575,7 @@ IdxType SearchUrut (TabInt T, ElType X)
 {	//Kamus
 	IdxType i;
 	//Algoritma
-	for(i=IdxMin;Elmt(T,i)<X && i<IdxMin+Neff(T);i++);
+	for(i=GetFirstIdx(T);Elmt(T,i)<X && i<=GetLastIdx(T);i++);
 	return (Elmt(T,i)==X?i:IdxUndef);
 }
 
@@ -614,7 +615,7 @@ void Add1Urut (TabInt * T, ElType X)
 	IdxType i=GetLastIdx(*T)+1;
 	//Algoritma
 	if(Neff(*T)>0){
-		for(;i>IdxMin&&Elmt(*T,i-1)>X;i--)
+		for(;i>GetFirstIdx(T)&&Elmt(*T,i-1)>X;i--)
 			Elmt(*T,i)=Elmt(*T,i-1);
 	}
 	Elmt(*T,i)=X;
