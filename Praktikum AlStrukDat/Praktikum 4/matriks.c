@@ -1,6 +1,6 @@
 /* 
-    NIM				: 13516010
-    Nama			: Tony
+    NIM				: 
+    Nama			:
     Tanggal			: 14 September 2017
     Topik praktikum	: ADT Matriks
     Deskripsi		: Implementasi dari matriks.h
