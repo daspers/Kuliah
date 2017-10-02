@@ -1,6 +1,4 @@
 /*
-NIM				: 13516010
-Nama			: Tony
 Tanggal			: 28 September 2017
 Topik praktikum	: Mesin Kata Versi 1
 Deskripsi		: 
