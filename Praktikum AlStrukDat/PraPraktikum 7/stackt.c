@@ -1,0 +1,48 @@
+#include "stackt.h"
+#include "boolean.h"
+
+
+/* ************ Prototype ************ */
+/* *** Konstruktor/Kreator *** */
+void CreateEmpty (Stack *S)
+/* I.S. sembarang; */
+/* F.S. Membuat sebuah stack S yang kosong berkapasitas MaxEl */
+/* jadi indeksnya antara 1.. MaxEl karena 0 tidak dipakai */
+/* Ciri stack kosong : Top bernilai Nil */
+{
+	Top(*S) = Nil;
+}
+
+
+/* ************ Predikat Untuk test keadaan KOLEKSI ************ */
+boolean IsEmpty (Stack S)
+/* Mengirim true jika Stack kosong: lihat definisi di atas */
+{
+	return Top(S)==Nil;
+}
+
+boolean IsFull (Stack S)
+/* Mengirim true jika tabel penampung nilai elemen stack penuh */
+{
+	return Top(S) == MaxEl;
+}
+
+/* ************ Menambahkan sebuah elemen ke Stack ************ */
+void Push (Stack * S, infotype X)
+/* Menambahkan X sebagai elemen Stack S. */
+/* I.S. S mungkin kosong, tabel penampung elemen stack TIDAK penuh */
+/* F.S. X menjadi Top yang baru,Top bertambah 1 */
+{
+	Top(*S)+=1;
+	InfoTop(*S) = X;
+}
+
+/* ************ Menghapus sebuah elemen Stack ************ */
+void Pop (Stack * S, infotype* X)
+/* Menghapus X dari Stack S. */
+/* I.S. S  tidak mungkin kosong */
+/* F.S. X adalah nilai elemen Top yang lama, Top berkurang 1 */
+{
+	*X = InfoTop(*S);
+	Top(*S)-=1;
+}
