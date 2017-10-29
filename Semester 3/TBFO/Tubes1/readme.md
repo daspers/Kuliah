@@ -4,6 +4,8 @@ Spesifikasi Tubes : https://drive.google.com/open?id=0B4xpMJ_0KDG_aWdVbEZpaGRkSU
 
 Program Utama : **driver.c**, **dfa.c**, **dfa.h**
 
+Laporan : https://drive.google.com/open?id=0B4xpMJ_0KDG_d0VzX1JYSWtucWM
+
 Created by:
 
 Harry Setiawan Hamjaya
