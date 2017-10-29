@@ -3,7 +3,7 @@ import java.io.*;
 import java.text.*;
 import java.util.*;
 
-public class AugmentedMatrix{
+class AugmentedMatrix{
 	public double mat[][];
 	public int rows;
 	public int cols;
@@ -133,7 +133,7 @@ public class AugmentedMatrix{
 	}
 }
 
-public class ColumnVector{
+class ColumnVector{
 	public double[] vec;
 	public double size;
 	public ColumnVector(int s){
@@ -161,7 +161,7 @@ public class ColumnVector{
 	}
 }
 
-public class Parameter{
+class Parameter{
 	public double[] cons;
 	public boolean[] exist;
 	public String[] pers;
@@ -210,17 +210,6 @@ public class AlGeo{
 	static DecimalFormat presisi = new DecimalFormat("#0.00000");
 	static boolean printtofile = true;
 	static boolean bacafile = false;
-	static int NS = 0;
-	
-	public static Parameter ParameterSolve(AugmentedMatrix mat){
-		Parameter par = new Parameter(mat.cols);
-		for(int i=0;i<mat.cols;i++){
-			if(!mat.IsFull0(i)){
-				
-			}
-		}
-		return par;
-	}
 	
 	static void ReadFileNSolve(){
 		/* Kamus */
@@ -250,32 +239,32 @@ public class AlGeo{
 			int num = readf.nextInt();
 			for(i=1;i<=num;i++){
 				//Read row and col
-				row = readf.nextInt();
 				col = readf.nextInt();
+				row = readf.nextInt();
 				//Assign matrix size
 				if(row>col){
 					mat = new AugmentedMatrix(row, row);
-					for(i=0;i<row;i++){
+					for(k=0;k<row;k++){
 						for(j=0;j<=col;j++){
-							mat.SetElmt(i,j,read.nextDouble());
+							mat.SetElmt(k,j,readf.nextDouble());
 						}
 					}
-					for(i=row; i<col;i++){
+					for(k=row; k<col;k++){
 						for(j=0;j<=col;j++){
-							mat.SetElmt(i,j,0);
+							mat.SetElmt(k,j,0);
 						}
 					}
 				}
 				else{
 					mat = new AugmentedMatrix(col, col);
-					for(i=0;i<row;i++){
+					for(k=0;k<row;k++){
 						for(j=0;j<=col;j++){
-							mat.SetElmt(i,j,read.nextDouble());
+							mat.SetElmt(k,j,readf.nextDouble());
 						}
 					}
-					for(i=row; i<col;i++){
+					for(k=row; k<col;k++){
 						for(j=0;j<=col;j++){
-							mat.SetElmt(i,j,0);
+							mat.SetElmt(k,j,0);
 						}
 					}
 				}
@@ -289,7 +278,7 @@ public class AlGeo{
 				if(!mat.IsSolutionExist()){
 					System.out.println("No Solution Exist");
 				}
-				if (mat.IsInfinite()) {
+				else if (mat.IsInfinite()) {
 					System.out.println("Infinit Solution");
 					par = new Parameter(mat.NS);
 					par.GetParameter(mat, presisi);
@@ -502,11 +491,11 @@ public class AlGeo{
 		
 		//Print
 		try{
+			r = new Scanner(System.in);
 			PrintWriter fwrite;
 			fwrite = null;
 			if(printtofile){
 				System.out.print("Masukkan nama file output : ");
-				nfile = r.nextLine();
 				nfile = r.nextLine();
 				fwrite = new PrintWriter(nfile, "UTF-8");
 				fwrite.println("Hasil : ");
@@ -558,15 +547,16 @@ public class AlGeo{
 		ColumnVector vec = new ColumnVector(N);
 		
 		for(i = 0; i < N; i++) {
-			System.out.print("Masukkan x_"+i+" : ");
+			if(!bacafile)
+				System.out.print("Masukkan x_"+i+" : ");
 			x = r.nextDouble();
 			for(j = 0; j < N; j++) {
 				mat.SetElmt(i,j,Math.pow(x,j));
 			}
 		}
-
 		for(i = 0; i < N; i++) {
-			System.out.print("Masukkan nilai dari f(x_"+i+") = ");
+			if(!bacafile)
+				System.out.print("Masukkan nilai dari f(x_"+i+") = ");
 			mat.SetElmt(i,N,r.nextDouble());
 		}
 		
@@ -576,11 +566,11 @@ public class AlGeo{
 		
 		//Print
 		try{
+			r=new Scanner(System.in);
 			PrintWriter fwrite;
 			fwrite = null;
 			if(printtofile){
 				System.out.print("Masukkan nama file output : ");
-				nfile = r.nextLine();
 				nfile = r.nextLine();
 				fwrite = new PrintWriter(nfile, "UTF-8");
 				fwrite.println("Hasil : ");
@@ -714,9 +704,9 @@ public class AlGeo{
 		try{
 			PrintWriter fwrite;
 			fwrite = null;
+			r = new Scanner(System.in);
 			if(printtofile){
 				System.out.print("Masukkan nama file output : ");
-				nfile = r.nextLine();
 				nfile = r.nextLine();
 				fwrite = new PrintWriter(nfile, "UTF-8");
 				fwrite.println("Hasil : ");
