@@ -1,0 +1,470 @@
+explode_bomb:
+   0x080492a9 <+0>:	sub    $0x1c,%esp
+   0x080492ac <+3>:	movl   $0x804a68d,(%esp)
+   0x080492b3 <+10>:	call   0x80487f0 <puts@plt>
+   0x080492b8 <+15>:	movl   $0x804a4f8,(%esp)
+   0x080492bf <+22>:	call   0x80487f0 <puts@plt>
+   0x080492c4 <+27>:	movl   $0x0,(%esp)
+   0x080492cb <+34>:	call   0x8049196 <send_msg>
+   0x080492d0 <+39>:	movl   $0x804a53c,(%esp)
+   0x080492d7 <+46>:	call   0x80487f0 <puts@plt>
+   0x080492dc <+51>:	movl   $0x8,(%esp)
+   0x080492e3 <+58>:	call   0x8048830 <exit@plt>
+
+strings_not_equal :
+   0x0804902a <+0>:		push   %edi								# x
+   0x0804902b <+1>:		push   %esi								# y
+   0x0804902c <+2>:		push   %ebx								# z
+   0x0804902d <+3>:		sub    $0x4,%esp						# %exp = %esp - 4
+   0x08049030 <+6>:		mov    0x14(%esp),%ebx					# z = *(%esp+ 20)
+   0x08049034 <+10>:	mov    0x18(%esp),%esi					# x = *(%esp + 24)
+   0x08049038 <+14>:	mov    %ebx,(%esp)						# *(%esp) = z 
+   0x0804903b <+17>:	call   0x804900b <string_length>		# 
+   0x08049040 <+22>:	mov    %eax,%edi						# x = string_length(z)
+   0x08049042 <+24>:	mov    %esi,(%esp)						# *(%esp) = y
+   0x08049045 <+27>:	call   0x804900b <string_length>		# 
+   0x0804904a <+32>:	mov    $0x1,%edx						# %edx = 1
+   0x0804904f <+37>:	cmp    %eax,%edi						# if(x != string_length(y)) then
+   0x08049051 <+39>:	jne    0x804908d <strings_not_equal+99>	# go to +99
+   0x08049053 <+41>:	movzbl (%ebx),%eax						# %eax = z
+   0x08049056 <+44>:	test   %al,%al							# if %al == 0 then
+   0x08049058 <+46>:	je     0x804907a <strings_not_equal+80>	# go to +80
+   0x0804905a <+48>:	cmp    (%esi),%al						# if( y == %al) then
+   0x0804905c <+50>:	je     0x8049066 <strings_not_equal+60>	# go to +60
+   0x0804905e <+52>:	xchg   %ax,%ax							# nothing to see here
+   0x08049060 <+54>:	jmp    0x8049081 <strings_not_equal+87>	# go to +87
+   0x08049062 <+56>:	cmp    (%esi),%al						# if(%al != y) then
+   0x08049064 <+58>:	jne    0x8049088 <strings_not_equal+94>	# go to +94
+   0x08049066 <+60>:	add    $0x1,%ebx						# %ebx += 1 // next char z
+   0x08049069 <+63>:	add    $0x1,%esi						# %esi += 1 // next char y
+   0x0804906c <+66>:	movzbl (%ebx),%eax						# %eax = *(%ebx)
+   0x0804906f <+69>:	test   %al,%al							# if(%al != 0)
+   0x08049071 <+71>:	jne    0x8049062 <strings_not_equal+56>	# go to +56
+   0x08049073 <+73>:	mov    $0x0,%edx						# %edx = 0
+   0x08049078 <+78>:	jmp    0x804908d <strings_not_equal+99>	# go to +99
+   0x0804907a <+80>:	mov    $0x0,%edx						# %edx = 0
+   0x0804907f <+85>:	jmp    0x804908d <strings_not_equal+99>	# go to +99
+   0x08049081 <+87>:	mov    $0x1,%edx						# %edx = 1
+   0x08049086 <+92>:	jmp    0x804908d <strings_not_equal+99>	# go to +99
+   0x08049088 <+94>:	mov    $0x1,%edx						# %edx = 1
+   0x0804908d <+99>:	mov    %edx,%eax						# %eax = 1
+   0x0804908f <+101>:	add    $0x4,%esp						% %esp +=4
+   0x08049092 <+104>:	pop    %ebx
+   0x08049093 <+105>:	pop    %esi
+   0x08049094 <+106>:	pop    %edi
+   0x08049095 <+107>:	ret    									# return %eax
+
+
+phase_1 :
+   0x08048b90 <+0>:		sub    $0x1c,%esp						# *(%esp) -= 28
+   0x08048b93 <+3>:		movl   $0x804a3f0,0x4(%esp)				# *(%esp+4) = 0x804a3f0
+   0x08048b9b <+11>:	mov    0x20(%esp),%eax					# %eax = *(%esp + 32) = *
+   0x08048b9f <+15>:	mov    %eax,(%esp)						# *(%esp) = %eax
+   0x08048ba2 <+18>:	call   0x804902a <strings_not_equal>	# strings_not_equal()
+   0x08048ba7 <+23>:	test   %eax,%eax						# if(%eax == 0) then goto 32
+   0x08048ba9 <+25>:	je     0x8048bb0 <phase_1+32>			# else	explode_bomb
+   0x08048bab <+27>:	call   0x80492a9 <explode_bomb>
+   0x08048bb0 <+32>:	add    $0x1c,%esp						# *(%esp) += 28
+   0x08048bb3 <+35>:	ret 									return %eax
+
+read_six_numbers:
+   0x080492e8 <+0>:	sub    $0x2c,%esp
+   0x080492eb <+3>:	mov    0x34(%esp),%eax
+   0x080492ef <+7>:	lea    0x14(%eax),%edx
+   0x080492f2 <+10>:	mov    %edx,0x1c(%esp)
+   0x080492f6 <+14>:	lea    0x10(%eax),%edx
+   0x080492f9 <+17>:	mov    %edx,0x18(%esp)
+   0x080492fd <+21>:	lea    0xc(%eax),%edx
+   0x08049300 <+24>:	mov    %edx,0x14(%esp)
+   0x08049304 <+28>:	lea    0x8(%eax),%edx
+   0x08049307 <+31>:	mov    %edx,0x10(%esp)
+   0x0804930b <+35>:	lea    0x4(%eax),%edx
+   0x0804930e <+38>:	mov    %edx,0xc(%esp)
+   0x08049312 <+42>:	mov    %eax,0x8(%esp)
+   0x08049316 <+46>:	movl   $0x804a69d,0x4(%esp)
+   0x0804931e <+54>:	mov    0x30(%esp),%eax
+   0x08049322 <+58>:	mov    %eax,(%esp)
+   0x08049325 <+61>:	call   0x8048860 <__isoc99_sscanf@plt>
+   0x0804932a <+66>:	cmp    $0x5,%eax
+   0x0804932d <+69>:	jg     0x8049334 <read_six_numbers+76>
+   0x0804932f <+71>:	call   0x80492a9 <explode_bomb>
+   0x08049334 <+76>:	add    $0x2c,%esp
+   0x08049337 <+79>:	ret  
+
+phase_2 :
+   0x08048bb4 <+0>:	push   %esi
+   0x08048bb5 <+1>:	push   %ebx
+   0x08048bb6 <+2>:	sub    $0x34,%esp
+   0x08048bb9 <+5>:	lea    0x18(%esp),%eax
+   0x08048bbd <+9>:	mov    %eax,0x4(%esp)
+   0x08048bc1 <+13>:	mov    0x40(%esp),%eax
+   0x08048bc5 <+17>:	mov    %eax,(%esp)
+   0x08048bc8 <+20>:	call   0x80492e8 <read_six_numbers>
+   0x08048bcd <+25>:	cmpl   $0x1,0x18(%esp)
+   0x08048bd2 <+30>:	je     0x8048bf2 <phase_2+62>
+   0x08048bd4 <+32>:	call   0x80492a9 <explode_bomb>
+   0x08048bd9 <+37>:	jmp    0x8048bf2 <phase_2+62>
+   0x08048bdb <+39>:	mov    -0x4(%ebx),%eax
+   0x08048bde <+42>:	add    %eax,%eax
+   0x08048be0 <+44>:	cmp    %eax,(%ebx)
+   0x08048be2 <+46>:	je     0x8048be9 <phase_2+53>
+   0x08048be4 <+48>:	call   0x80492a9 <explode_bomb>
+   0x08048be9 <+53>:	add    $0x4,%ebx
+   0x08048bec <+56>:	cmp    %esi,%ebx
+   0x08048bee <+58>:	jne    0x8048bdb <phase_2+39>
+   0x08048bf0 <+60>:	jmp    0x8048bfc <phase_2+72>
+   0x08048bf2 <+62>:	lea    0x1c(%esp),%ebx
+   0x08048bf6 <+66>:	lea    0x30(%esp),%esi
+   0x08048bfa <+70>:	jmp    0x8048bdb <phase_2+39>
+   0x08048bfc <+72>:	add    $0x34,%esp
+   0x08048bff <+75>:	pop    %ebx
+   0x08048c00 <+76>:	pop    %esi
+   0x08048c01 <+77>:	ret 
+
+phase_3 :
+   0x08048c02 <+0>:	sub    $0x2c,%esp
+   0x08048c05 <+3>:	lea    0x1c(%esp),%eax
+   0x08048c09 <+7>:	mov    %eax,0xc(%esp)
+   0x08048c0d <+11>:	lea    0x18(%esp),%eax
+   0x08048c11 <+15>:	mov    %eax,0x8(%esp)
+   0x08048c15 <+19>:	movl   $0x804a6a9,0x4(%esp)
+   0x08048c1d <+27>:	mov    0x30(%esp),%eax
+   0x08048c21 <+31>:	mov    %eax,(%esp)
+   0x08048c24 <+34>:	call   0x8048860 <__isoc99_sscanf@plt>			# scanf
+   0x08048c29 <+39>:	cmp    $0x1,%eax
+   0x08048c2c <+42>:	jg     0x8048c33 <phase_3+49>
+   0x08048c2e <+44>:	call   0x80492a9 <explode_bomb>
+   0x08048c33 <+49>:	cmpl   $0x7,0x18(%esp)
+   0x08048c38 <+54>:	ja     0x8048ca0 <phase_3+158>
+   0x08048c3a <+56>:	mov    0x18(%esp),%eax
+   0x08048c3e <+60>:	jmp    *0x804a464(,%eax,4)
+   0x08048c45 <+67>:	mov    $0x0,%eax
+   0x08048c4a <+72>:	jmp    0x8048c51 <phase_3+79>
+   0x08048c4c <+74>:	mov    $0x22b,%eax
+   0x08048c51 <+79>:	sub    $0x13d,%eax
+   0x08048c56 <+84>:	jmp    0x8048c5d <phase_3+91>
+   0x08048c58 <+86>:	mov    $0x0,%eax
+   0x08048c5d <+91>:	add    $0x1de,%eax
+   0x08048c62 <+96>:	jmp    0x8048c69 <phase_3+103>
+   0x08048c64 <+98>:	mov    $0x0,%eax
+   0x08048c69 <+103>:	sub    $0x104,%eax
+   0x08048c6e <+108>:	jmp    0x8048c75 <phase_3+115>
+   0x08048c70 <+110>:	mov    $0x0,%eax
+   0x08048c75 <+115>:	add    $0x104,%eax
+   0x08048c7a <+120>:	jmp    0x8048c81 <phase_3+127>
+   0x08048c7c <+122>:	mov    $0x0,%eax
+   0x08048c81 <+127>:	sub    $0x104,%eax
+   0x08048c86 <+132>:	jmp    0x8048c8d <phase_3+139>
+   0x08048c88 <+134>:	mov    $0x0,%eax
+   0x08048c8d <+139>:	add    $0x104,%eax
+   0x08048c92 <+144>:	jmp    0x8048c99 <phase_3+151>
+   0x08048c94 <+146>:	mov    $0x0,%eax
+   0x08048c99 <+151>:	sub    $0x104,%eax
+   0x08048c9e <+156>:	jmp    0x8048caa <phase_3+168>
+   0x08048ca0 <+158>:	call   0x80492a9 <explode_bomb>
+   0x08048ca5 <+163>:	mov    $0x0,%eax
+   0x08048caa <+168>:	cmpl   $0x5,0x18(%esp)
+   0x08048caf <+173>:	jg     0x8048cb7 <phase_3+181>
+   0x08048cb1 <+175>:	cmp    0x1c(%esp),%eax
+   0x08048cb5 <+179>:	je     0x8048cbc <phase_3+186>
+   0x08048cb7 <+181>:	call   0x80492a9 <explode_bomb>
+   0x08048cbc <+186>:	add    $0x2c,%esp
+   0x08048cbf <+189>:	nop
+   0x08048cc0 <+190>:	ret 
+
+func4:
+   0x08048cc1 <+0>:	push   %edi
+   0x08048cc2 <+1>:	push   %esi
+   0x08048cc3 <+2>:	push   %ebx
+   0x08048cc4 <+3>:	sub    $0x10,%esp
+   0x08048cc7 <+6>:	mov    0x20(%esp),%ebx
+   0x08048ccb <+10>:	mov    0x24(%esp),%esi
+   0x08048ccf <+14>:	test   %ebx,%ebx
+   0x08048cd1 <+16>:	jle    0x8048cff <func4+62>
+   0x08048cd3 <+18>:	mov    %esi,%eax
+   0x08048cd5 <+20>:	cmp    $0x1,%ebx
+   0x08048cd8 <+23>:	je     0x8048d04 <func4+67>
+   0x08048cda <+25>:	mov    %esi,0x4(%esp)
+   0x08048cde <+29>:	lea    -0x1(%ebx),%eax
+   0x08048ce1 <+32>:	mov    %eax,(%esp)
+   0x08048ce4 <+35>:	call   0x8048cc1 <func4>
+   0x08048ce9 <+40>:	lea    (%eax,%esi,1),%edi
+   0x08048cec <+43>:	mov    %esi,0x4(%esp)
+   0x08048cf0 <+47>:	sub    $0x2,%ebx
+   0x08048cf3 <+50>:	mov    %ebx,(%esp)
+   0x08048cf6 <+53>:	call   0x8048cc1 <func4>
+   0x08048cfb <+58>:	add    %edi,%eax
+   0x08048cfd <+60>:	jmp    0x8048d04 <func4+67>
+   0x08048cff <+62>:	mov    $0x0,%eax
+   0x08048d04 <+67>:	add    $0x10,%esp
+   0x08048d07 <+70>:	pop    %ebx
+   0x08048d08 <+71>:	pop    %esi
+   0x08048d09 <+72>:	pop    %edi
+   0x08048d0a <+73>:	ret   
+
+phase_4:
+   0x08048d0b <+0>:	sub    $0x2c,%esp
+   0x08048d0e <+3>:	lea    0x18(%esp),%eax
+   0x08048d12 <+7>:	mov    %eax,0xc(%esp)
+   0x08048d16 <+11>:	lea    0x1c(%esp),%eax
+   0x08048d1a <+15>:	mov    %eax,0x8(%esp)
+   0x08048d1e <+19>:	movl   $0x804a6a9,0x4(%esp)
+   0x08048d26 <+27>:	mov    0x30(%esp),%eax
+   0x08048d2a <+31>:	mov    %eax,(%esp)
+   0x08048d2d <+34>:	call   0x8048860 <__isoc99_sscanf@plt>				#scanf
+   0x08048d32 <+39>:	cmp    $0x2,%eax
+   0x08048d35 <+42>:	jne    0x8048d43 <phase_4+56>
+   0x08048d37 <+44>:	mov    0x18(%esp),%eax
+   0x08048d3b <+48>:	sub    $0x2,%eax
+   0x08048d3e <+51>:	cmp    $0x2,%eax
+   0x08048d41 <+54>:	jbe    0x8048d48 <phase_4+61>
+   0x08048d43 <+56>:	call   0x80492a9 <explode_bomb>
+   0x08048d48 <+61>:	mov    0x18(%esp),%eax
+   0x08048d4c <+65>:	mov    %eax,0x4(%esp)
+   0x08048d50 <+69>:	movl   $0x7,(%esp)
+   0x08048d57 <+76>:	call   0x8048cc1 <func4>
+   0x08048d5c <+81>:	cmp    0x1c(%esp),%eax
+   0x08048d60 <+85>:	je     0x8048d67 <phase_4+92>
+   0x08048d62 <+87>:	call   0x80492a9 <explode_bomb>
+   0x08048d67 <+92>:	add    $0x2c,%esp
+   0x08048d6a <+95>:	ret    
+
+phase_5:
+   0x08048d6b <+0>:	push   %ebx
+   0x08048d6c <+1>:	sub    $0x28,%esp
+   0x08048d6f <+4>:	mov    0x30(%esp),%ebx
+   0x08048d73 <+8>:	mov    %gs:0x14,%eax
+   0x08048d79 <+14>:	mov    %eax,0x1c(%esp)
+   0x08048d7d <+18>:	xor    %eax,%eax
+   0x08048d7f <+20>:	mov    %ebx,(%esp)
+   0x08048d82 <+23>:	call   0x804900b <string_length>
+   0x08048d87 <+28>:	cmp    $0x6,%eax
+   0x08048d8a <+31>:	je     0x8048dd2 <phase_5+103>
+   0x08048d8c <+33>:	call   0x80492a9 <explode_bomb>
+   0x08048d91 <+38>:	jmp    0x8048dd2 <phase_5+103>
+   0x08048d93 <+40>:	movzbl (%ebx,%eax,1),%edx
+   0x08048d97 <+44>:	and    $0xf,%edx
+   0x08048d9a <+47>:	movzbl 0x804a484(%edx),%edx
+   0x08048da1 <+54>:	mov    %dl,0x15(%esp,%eax,1)
+   0x08048da5 <+58>:	add    $0x1,%eax
+   0x08048da8 <+61>:	cmp    $0x6,%eax
+   0x08048dab <+64>:	jne    0x8048d93 <phase_5+40>
+   0x08048dad <+66>:	movb   $0x0,0x1b(%esp)
+   0x08048db2 <+71>:	movl   $0x804a45a,0x4(%esp)
+   0x08048dba <+79>:	lea    0x15(%esp),%eax
+   0x08048dbe <+83>:	mov    %eax,(%esp)
+   0x08048dc1 <+86>:	call   0x804902a <strings_not_equal>
+   0x08048dc6 <+91>:	test   %eax,%eax
+   0x08048dc8 <+93>:	je     0x8048dd9 <phase_5+110>
+   0x08048dca <+95>:	call   0x80492a9 <explode_bomb>
+   0x08048dcf <+100>:	nop
+   0x08048dd0 <+101>:	jmp    0x8048dd9 <phase_5+110>
+   0x08048dd2 <+103>:	mov    $0x0,%eax
+   0x08048dd7 <+108>:	jmp    0x8048d93 <phase_5+40>
+   0x08048dd9 <+110>:	mov    0x1c(%esp),%eax
+   0x08048ddd <+114>:	xor    %gs:0x14,%eax
+   0x08048de4 <+121>:	je     0x8048deb <phase_5+128>
+   0x08048de6 <+123>:	call   0x80487c0 <__stack_chk_fail@plt>
+   0x08048deb <+128>:	add    $0x28,%esp
+   0x08048dee <+131>:	pop    %ebx
+   0x08048def <+132>:	nop
+   0x08048df0 <+133>:	ret
+
+phase_6:
+   0x08048df1 <+0>:	push   %esi
+   0x08048df2 <+1>:	push   %ebx
+   0x08048df3 <+2>:	sub    $0x44,%esp
+   0x08048df6 <+5>:	lea    0x10(%esp),%eax
+   0x08048dfa <+9>:	mov    %eax,0x4(%esp)
+   0x08048dfe <+13>:	mov    0x50(%esp),%eax
+   0x08048e02 <+17>:	mov    %eax,(%esp)
+   0x08048e05 <+20>:	call   0x80492e8 <read_six_numbers>
+   0x08048e0a <+25>:	mov    $0x0,%esi
+   0x08048e0f <+30>:	mov    0x10(%esp,%esi,4),%eax
+   0x08048e13 <+34>:	sub    $0x1,%eax
+   0x08048e16 <+37>:	cmp    $0x5,%eax
+   0x08048e19 <+40>:	jbe    0x8048e20 <phase_6+47>
+   0x08048e1b <+42>:	call   0x80492a9 <explode_bomb>
+   0x08048e20 <+47>:	add    $0x1,%esi
+   0x08048e23 <+50>:	cmp    $0x6,%esi
+   0x08048e26 <+53>:	jne    0x8048e2f <phase_6+62>
+   0x08048e28 <+55>:	mov    $0x0,%ebx
+   0x08048e2d <+60>:	jmp    0x8048e67 <phase_6+118>
+   0x08048e2f <+62>:	mov    %esi,%ebx
+   0x08048e31 <+64>:	mov    0x10(%esp,%ebx,4),%eax
+   0x08048e35 <+68>:	cmp    %eax,0xc(%esp,%esi,4)
+   0x08048e39 <+72>:	jne    0x8048e40 <phase_6+79>
+   0x08048e3b <+74>:	call   0x80492a9 <explode_bomb>
+   0x08048e40 <+79>:	add    $0x1,%ebx
+   0x08048e43 <+82>:	cmp    $0x5,%ebx
+   0x08048e46 <+85>:	jle    0x8048e31 <phase_6+64>
+   0x08048e48 <+87>:	jmp    0x8048e0f <phase_6+30>
+   0x08048e4a <+89>:	mov    0x8(%edx),%edxx
+   0x08048e4d <+92>:	add    $0x1,%eax
+   0x08048e50 <+95>:	cmp    %ecx,%eax
+   0x08048e52 <+97>:	jne    0x8048e4a <phase_6+89>
+   0x08048e54 <+99>:	jmp    0x8048e5b <phase_6+106>
+   0x08048e56 <+101>:	mov    $0x804d154,%edx
+   0x08048e5b <+106>:	mov    %edx,0x28(%esp,%esi,4)
+   0x08048e5f <+110>:	add    $0x1,%ebx
+   0x08048e62 <+113>:	cmp    $0x6,%ebx
+   0x08048e65 <+116>:	je     0x8048e7e <phase_6+141>
+   0x08048e67 <+118>:	mov    %ebx,%esi
+   0x08048e69 <+120>:	mov    0x10(%esp,%ebx,4),%ecx
+   0x08048e6d <+124>:	cmp    $0x1,%ecx
+   0x08048e70 <+127>:	jle    0x8048e56 <phase_6+101>
+   0x08048e72 <+129>:	mov    $0x1,%eax
+   0x08048e77 <+134>:	mov    $0x804d154,%edx
+   0x08048e7c <+139>:	jmp    0x8048e4a <phase_6+89>
+   0x08048e7e <+141>:	mov    0x28(%esp),%ebx
+   0x08048e82 <+145>:	lea    0x2c(%esp),%eax
+   0x08048e86 <+149>:	lea    0x40(%esp),%esi
+   0x08048e8a <+153>:	mov    %ebx,%ecx
+   0x08048e8c <+155>:	mov    (%eax),%edx
+   0x08048e8e <+157>:	mov    %edx,0x8(%ecx)
+   0x08048e91 <+160>:	add    $0x4,%eax
+   0x08048e94 <+163>:	cmp    %esi,%eax
+   0x08048e96 <+165>:	je     0x8048e9c <phase_6+171>
+   0x08048e98 <+167>:	mov    %edx,%ecx
+   0x08048e9a <+169>:	jmp    0x8048e8c <phase_6+155>
+   0x08048e9c <+171>:	movl   $0x0,0x8(%edx)
+   0x08048ea3 <+178>:	mov    $0x5,%esi
+   0x08048ea8 <+183>:	mov    0x8(%ebx),%eax
+   0x08048eab <+186>:	mov    (%eax),%eax
+   0x08048ead <+188>:	cmp    %eax,(%ebx)
+   0x08048eaf <+190>:	jge    0x8048eb6 <phase_6+197>
+   0x08048eb1 <+192>:	call   0x80492a9 <explode_bomb>
+   0x08048eb6 <+197>:	mov    0x8(%ebx),%ebx
+   0x08048eb9 <+200>:	sub    $0x1,%esi
+   0x08048ebc <+203>:	jne    0x8048ea8 <phase_6+183>
+   0x08048ebe <+205>:	add    $0x44,%esp
+   0x08048ec1 <+208>:	pop    %ebx
+   0x08048ec2 <+209>:	pop    %esi
+   0x08048ec3 <+210>:	ret 
+
+
+phase_defused:
+   0x08049438 <+0>:		sub    $0x1cc,%esp						# %esp -= 460
+   0x0804943e <+6>:		mov    %gs:0x14,%eax					# 
+   0x08049444 <+12>:	mov    %eax,0x1bc(%esp)					# 
+   0x0804944b <+19>:	xor    %eax,%eax
+   0x0804944d <+21>:	movl   $0x1,(%esp)
+   0x08049454 <+28>:	call   0x8049196 <send_msg>
+   0x08049459 <+33>:	cmpl   $0x6,0x804d7e8
+   0x08049460 <+40>:	jne    0x80494e0 <phase_defused+168>
+   0x08049462 <+42>:	lea    0x2c(%esp),%eax
+   0x08049466 <+46>:	mov    %eax,0x10(%esp)
+   0x0804946a <+50>:	lea    0x28(%esp),%eax
+   0x0804946e <+54>:	mov    %eax,0xc(%esp)
+   0x08049472 <+58>:	lea    0x24(%esp),%eax
+   0x08049476 <+62>:	mov    %eax,0x8(%esp)
+   0x0804947a <+66>:	movl   $0x804a703,0x4(%esp)
+   0x08049482 <+74>:	movl   $0x804dcb0,(%esp)
+   0x08049489 <+81>:	call   0x8048860 <__isoc99_sscanf@plt>
+   0x0804948e <+86>:	cmp    $0x3,%eax
+   0x08049491 <+89>:	jne    0x80494c8 <phase_defused+144>
+   0x08049493 <+91>:	movl   $0x804a70c,0x4(%esp)
+   0x0804949b <+99>:	lea    0x2c(%esp),%eax
+   0x0804949f <+103>:	mov    %eax,(%esp)
+   0x080494a2 <+106>:	call   0x804902a <strings_not_equal>
+   0x080494a7 <+111>:	test   %eax,%eax
+   0x080494a9 <+113>:	jne    0x80494c8 <phase_defused+144>
+   0x080494ab <+115>:	movl   $0x804a560,(%esp)
+   0x080494b2 <+122>:	call   0x80487f0 <puts@plt>
+   0x080494b7 <+127>:	movl   $0x804a58c,(%esp)
+   0x080494be <+134>:	call   0x80487f0 <puts@plt>
+   0x080494c3 <+139>:	call   0x8048f15 <secret_phase>
+   0x080494c8 <+144>:	movl   $0x804a5c4,(%esp)
+   0x080494cf <+151>:	call   0x80487f0 <puts@plt>
+   0x080494d4 <+156>:	movl   $0x804a5f4,(%esp)
+   0x080494db <+163>:	call   0x80487f0 <puts@plt>
+   0x080494e0 <+168>:	mov    0x1bc(%esp),%eax
+   0x080494e7 <+175>:	xor    %gs:0x14,%eax
+   0x080494ee <+182>:	je     0x80494f5 <phase_defused+189>
+   0x080494f0 <+184>:	call   0x80487c0 <__stack_chk_fail@plt>
+   0x080494f5 <+189>:	add    $0x1cc,%esp
+   0x080494fb <+195>:	ret
+
+main : 
+   0x08048a1d <+0>:	push   %ebp
+   0x08048a1e <+1>:	mov    %esp,%ebp
+   0x08048a20 <+3>:	push   %ebx
+   0x08048a21 <+4>:	and    $0xfffffff0,%esp
+   0x08048a24 <+7>:	sub    $0x10,%esp
+   0x08048a27 <+10>:	mov    0x8(%ebp),%eax
+   0x08048a2a <+13>:	mov    0xc(%ebp),%ebx
+   0x08048a2d <+16>:	cmp    $0x1,%eax
+   0x08048a30 <+19>:	jne    0x8048a3e <main+33>
+   0x08048a32 <+21>:	mov    0x804d7c4,%eax
+   0x08048a37 <+26>:	mov    %eax,0x804d7ec
+   0x08048a3c <+31>:	jmp    0x8048ab2 <main+149>
+   0x08048a3e <+33>:	cmp    $0x2,%eax
+   0x08048a41 <+36>:	jne    0x8048a8c <main+111>
+   0x08048a43 <+38>:	movl   $0x804a1b0,0x4(%esp)
+   0x08048a4b <+46>:	mov    0x4(%ebx),%eax
+   0x08048a4e <+49>:	mov    %eax,(%esp)
+   0x08048a51 <+52>:	call   0x8048870 <fopen@plt>
+   0x08048a56 <+57>:	mov    %eax,0x804d7ec
+   0x08048a5b <+62>:	test   %eax,%eax
+   0x08048a5d <+64>:	jne    0x8048ab2 <main+149>
+   0x08048a5f <+66>:	mov    0x4(%ebx),%eax
+   0x08048a62 <+69>:	mov    %eax,0xc(%esp)
+   0x08048a66 <+73>:	mov    (%ebx),%eax
+   0x08048a68 <+75>:	mov    %eax,0x8(%esp)
+   0x08048a6c <+79>:	movl   $0x804a1b2,0x4(%esp)
+   0x08048a74 <+87>:	movl   $0x1,(%esp)
+   0x08048a7b <+94>:	call   0x8048890 <__printf_chk@plt>
+   0x08048a80 <+99>:	movl   $0x8,(%esp)
+   0x08048a87 <+106>:	call   0x8048830 <exit@plt>
+   0x08048a8c <+111>:	mov    (%ebx),%eax
+   0x08048a8e <+113>:	mov    %eax,0x8(%esp)
+   0x08048a92 <+117>:	movl   $0x804a1cf,0x4(%esp)
+   0x08048a9a <+125>:	movl   $0x1,(%esp)
+   0x08048aa1 <+132>:	call   0x8048890 <__printf_chk@plt>
+   0x08048aa6 <+137>:	movl   $0x8,(%esp)
+   0x08048aad <+144>:	call   0x8048830 <exit@plt>
+   0x08048ab2 <+149>:	call   0x8049096 <initialize_bomb>
+   0x08048ab7 <+154>:	movl   $0x804a1ec,(%esp)
+   0x08048abe <+161>:	call   0x80487f0 <puts@plt>
+   0x08048ac3 <+166>:	movl   $0x804a230,(%esp)
+   0x08048aca <+173>:	call   0x80487f0 <puts@plt>
+   0x08048acf <+178>:	call   0x8049338 <read_line>
+   0x08048ad4 <+183>:	mov    %eax,(%esp)
+   0x08048ad7 <+186>:	call   0x8048b90 <phase_1>
+   0x08048adc <+191>:	call   0x8049438 <phase_defused>
+   0x08048ae1 <+196>:	movl   $0x804a260,(%esp)
+   0x08048ae8 <+203>:	call   0x80487f0 <puts@plt>
+   0x08048aed <+208>:	call   0x8049338 <read_line>
+   0x08048af2 <+213>:	mov    %eax,(%esp)
+   0x08048af5 <+216>:	call   0x8048bb4 <phase_2>
+   0x08048afa <+221>:	call   0x8049438 <phase_defused>
+   0x08048aff <+226>:	movl   $0x804a2b8,(%esp)
+   0x08048b06 <+233>:	call   0x80487f0 <puts@plt>
+   0x08048b0b <+238>:	call   0x8049338 <read_line>
+   0x08048b10 <+243>:	mov    %eax,(%esp)
+   0x08048b13 <+246>:	call   0x8048c02 <phase_3>
+   0x08048b18 <+251>:	call   0x8049438 <phase_defused>
+   0x08048b1d <+256>:	movl   $0x804a2f0,(%esp)
+   0x08048b24 <+263>:	call   0x80487f0 <puts@plt>
+   0x08048b29 <+268>:	call   0x8049338 <read_line>
+   0x08048b2e <+273>:	mov    %eax,(%esp)
+   0x08048b31 <+276>:	call   0x8048d0b <phase_4>
+   0x08048b36 <+281>:	call   0x8049438 <phase_defused>
+   0x08048b3b <+286>:	movl   $0x804a32c,(%esp)
+   0x08048b42 <+293>:	call   0x80487f0 <puts@plt>
+   0x08048b47 <+298>:	call   0x8049338 <read_line>
+   0x08048b4c <+303>:	mov    %eax,(%esp)
+   0x08048b4f <+306>:	call   0x8048d6b <phase_5>
+   0x08048b54 <+311>:	call   0x8049438 <phase_defused>
+   0x08048b59 <+316>:	movl   $0x804a36c,(%esp)
+   0x08048b60 <+323>:	call   0x80487f0 <puts@plt>
+   0x08048b65 <+328>:	call   0x8049338 <read_line>
+   0x08048b6a <+333>:	mov    %eax,(%esp)
+   0x08048b6d <+336>:	call   0x8048df1 <phase_6>
+   0x08048b72 <+341>:	call   0x8049438 <phase_defused>
+   0x08048b77 <+346>:	movl   $0x804a3a4,(%esp)
+   0x08048b7e <+353>:	call   0x80487f0 <puts@plt>					# puts
+   0x08048b83 <+358>:	mov    $0x0,%eax
+   0x08048b88 <+363>:	mov    -0x4(%ebp),%ebx
+   0x08048b8b <+366>:	leave  
+   0x08048b8c <+367>:	ret  
