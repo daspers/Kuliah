@@ -57,7 +57,7 @@ strings_not_equal :
 
 phase_1 :
    0x08048b90 <+0>:		sub    $0x1c,%esp						# *(%esp) -= 28
-   0x08048b93 <+3>:		movl   $0x804a3f0,0x4(%esp)				# *(%esp+4) = 0x804a3f0
+   0x08048b93 <+3>:		movl   $0x804a3f0,0x4(%esp)				# *(%esp+4) = 0x804a3f0 // const
    0x08048b9b <+11>:	mov    0x20(%esp),%eax					# %eax = *(%esp + 32) = *
    0x08048b9f <+15>:	mov    %eax,(%esp)						# *(%esp) = %eax
    0x08048ba2 <+18>:	call   0x804902a <strings_not_equal>	# strings_not_equal()
@@ -68,73 +68,73 @@ phase_1 :
    0x08048bb3 <+35>:	ret 									return %eax
 
 read_six_numbers:
-   0x080492e8 <+0>:	sub    $0x2c,%esp
-   0x080492eb <+3>:	mov    0x34(%esp),%eax
-   0x080492ef <+7>:	lea    0x14(%eax),%edx
-   0x080492f2 <+10>:	mov    %edx,0x1c(%esp)
-   0x080492f6 <+14>:	lea    0x10(%eax),%edx
-   0x080492f9 <+17>:	mov    %edx,0x18(%esp)
-   0x080492fd <+21>:	lea    0xc(%eax),%edx
-   0x08049300 <+24>:	mov    %edx,0x14(%esp)
-   0x08049304 <+28>:	lea    0x8(%eax),%edx
-   0x08049307 <+31>:	mov    %edx,0x10(%esp)
-   0x0804930b <+35>:	lea    0x4(%eax),%edx
-   0x0804930e <+38>:	mov    %edx,0xc(%esp)
-   0x08049312 <+42>:	mov    %eax,0x8(%esp)
-   0x08049316 <+46>:	movl   $0x804a69d,0x4(%esp)
-   0x0804931e <+54>:	mov    0x30(%esp),%eax
-   0x08049322 <+58>:	mov    %eax,(%esp)
-   0x08049325 <+61>:	call   0x8048860 <__isoc99_sscanf@plt>
-   0x0804932a <+66>:	cmp    $0x5,%eax
-   0x0804932d <+69>:	jg     0x8049334 <read_six_numbers+76>
-   0x0804932f <+71>:	call   0x80492a9 <explode_bomb>
-   0x08049334 <+76>:	add    $0x2c,%esp
-   0x08049337 <+79>:	ret  
+   0x080492e8 <+0>:		sub    $0x2c,%esp						# %esp -= 44
+   0x080492eb <+3>:		mov    0x34(%esp),%eax					# %eax = *(%esp + 34)
+   0x080492ef <+7>:		lea    0x14(%eax),%edx					# %edx = %eax + 20
+   0x080492f2 <+10>:	mov    %edx,0x1c(%esp)					# *(%esp + 28) = %edx
+   0x080492f6 <+14>:	lea    0x10(%eax),%edx					# %edx = %eax + 16
+   0x080492f9 <+17>:	mov    %edx,0x18(%esp)					# *(esp + 24) = %edx
+   0x080492fd <+21>:	lea    0xc(%eax),%edx					# %edx = %eax + 12
+   0x08049300 <+24>:	mov    %edx,0x14(%esp)					# *(%esp + 20) = %edx
+   0x08049304 <+28>:	lea    0x8(%eax),%edx					# %edx = %eax + 8
+   0x08049307 <+31>:	mov    %edx,0x10(%esp)					# *(%esp + 16) = %edx
+   0x0804930b <+35>:	lea    0x4(%eax),%edx					# %edx = %eax + 4
+   0x0804930e <+38>:	mov    %edx,0xc(%esp)					# *(%esp + 12) = %edx
+   0x08049312 <+42>:	mov    %eax,0x8(%esp)					# *(%esp + 8) = %eax
+   0x08049316 <+46>:	movl   $0x804a69d,0x4(%esp)				# *(%esp + 4) = 0x804a69d
+   0x0804931e <+54>:	mov    0x30(%esp),%eax					# %eax = *(%esp + 48)
+   0x08049322 <+58>:	mov    %eax,(%esp)						# *(%esp) = %eax
+   0x08049325 <+61>:	call   0x8048860 <__isoc99_sscanf@plt>	# scanf t
+   0x0804932a <+66>:	cmp    $0x5,%eax						# if(t > 5) then
+   0x0804932d <+69>:	jg     0x8049334 <read_six_numbers+76>	# go to +76
+   0x0804932f <+71>:	call   0x80492a9 <explode_bomb>			# explode_bomb 
+   0x08049334 <+76>:	add    $0x2c,%esp						# %esp += 44
+   0x08049337 <+79>:	ret  									# return %eax
 
 phase_2 :
-   0x08048bb4 <+0>:	push   %esi
-   0x08048bb5 <+1>:	push   %ebx
-   0x08048bb6 <+2>:	sub    $0x34,%esp
-   0x08048bb9 <+5>:	lea    0x18(%esp),%eax
-   0x08048bbd <+9>:	mov    %eax,0x4(%esp)
-   0x08048bc1 <+13>:	mov    0x40(%esp),%eax
-   0x08048bc5 <+17>:	mov    %eax,(%esp)
-   0x08048bc8 <+20>:	call   0x80492e8 <read_six_numbers>
-   0x08048bcd <+25>:	cmpl   $0x1,0x18(%esp)
-   0x08048bd2 <+30>:	je     0x8048bf2 <phase_2+62>
-   0x08048bd4 <+32>:	call   0x80492a9 <explode_bomb>
-   0x08048bd9 <+37>:	jmp    0x8048bf2 <phase_2+62>
-   0x08048bdb <+39>:	mov    -0x4(%ebx),%eax
-   0x08048bde <+42>:	add    %eax,%eax
-   0x08048be0 <+44>:	cmp    %eax,(%ebx)
-   0x08048be2 <+46>:	je     0x8048be9 <phase_2+53>
-   0x08048be4 <+48>:	call   0x80492a9 <explode_bomb>
-   0x08048be9 <+53>:	add    $0x4,%ebx
-   0x08048bec <+56>:	cmp    %esi,%ebx
-   0x08048bee <+58>:	jne    0x8048bdb <phase_2+39>
-   0x08048bf0 <+60>:	jmp    0x8048bfc <phase_2+72>
-   0x08048bf2 <+62>:	lea    0x1c(%esp),%ebx
-   0x08048bf6 <+66>:	lea    0x30(%esp),%esi
-   0x08048bfa <+70>:	jmp    0x8048bdb <phase_2+39>
-   0x08048bfc <+72>:	add    $0x34,%esp
+   0x08048bb4 <+0>:		push   %esi								# 
+   0x08048bb5 <+1>:		push   %ebx					
+   0x08048bb6 <+2>:		sub    $0x34,%esp						# %esp -= 52
+   0x08048bb9 <+5>:		lea    0x18(%esp),%eax					# %eax = %esp + 24
+   0x08048bbd <+9>:		mov    %eax,0x4(%esp)					# *(%esp + 4) = %eax
+   0x08048bc1 <+13>:	mov    0x40(%esp),%eax					# %eax = *(%esp + 40)
+   0x08048bc5 <+17>:	mov    %eax,(%esp)						# *(%esp) = %eax
+   0x08048bc8 <+20>:	call   0x80492e8 <read_six_numbers>		# read_six_numbers
+   0x08048bcd <+25>:	cmpl   $0x1,0x18(%esp)					# if(*(%esp + 18) == 1)then 
+   0x08048bd2 <+30>:	je     0x8048bf2 <phase_2+62>			# go to +62
+   0x08048bd4 <+32>:	call   0x80492a9 <explode_bomb>			# explode_bomb
+   0x08048bd9 <+37>:	jmp    0x8048bf2 <phase_2+62>			# go to +62
+   0x08048bdb <+39>:	mov    -0x4(%ebx),%eax					# %eax = *(%ebx - 4)
+   0x08048bde <+42>:	add    %eax,%eax						# %eax += %eax
+   0x08048be0 <+44>:	cmp    %eax,(%ebx)						# if(%eax == *(%ebx)) then
+   0x08048be2 <+46>:	je     0x8048be9 <phase_2+53>			# go to +53
+   0x08048be4 <+48>:	call   0x80492a9 <explode_bomb>			# explode_bomb()
+   0x08048be9 <+53>:	add    $0x4,%ebx						# %ebx += 4
+   0x08048bec <+56>:	cmp    %esi,%ebx						# if(%esi != %ebp) then
+   0x08048bee <+58>:	jne    0x8048bdb <phase_2+39>			# go to 39
+   0x08048bf0 <+60>:	jmp    0x8048bfc <phase_2+72>			# else go to 72
+   0x08048bf2 <+62>:	lea    0x1c(%esp),%ebx					# %ebx = %esp + 28
+   0x08048bf6 <+66>:	lea    0x30(%esp),%esi					# %esi = %esp + 48
+   0x08048bfa <+70>:	jmp    0x8048bdb <phase_2+39>			# go to +39
+   0x08048bfc <+72>:	add    $0x34,%esp						# %esp += 52
    0x08048bff <+75>:	pop    %ebx
    0x08048c00 <+76>:	pop    %esi
-   0x08048c01 <+77>:	ret 
+   0x08048c01 <+77>:	ret 									# return %eax
 
 phase_3 :
-   0x08048c02 <+0>:	sub    $0x2c,%esp
-   0x08048c05 <+3>:	lea    0x1c(%esp),%eax
-   0x08048c09 <+7>:	mov    %eax,0xc(%esp)
-   0x08048c0d <+11>:	lea    0x18(%esp),%eax
-   0x08048c11 <+15>:	mov    %eax,0x8(%esp)
-   0x08048c15 <+19>:	movl   $0x804a6a9,0x4(%esp)
-   0x08048c1d <+27>:	mov    0x30(%esp),%eax
-   0x08048c21 <+31>:	mov    %eax,(%esp)
-   0x08048c24 <+34>:	call   0x8048860 <__isoc99_sscanf@plt>			# scanf
-   0x08048c29 <+39>:	cmp    $0x1,%eax
-   0x08048c2c <+42>:	jg     0x8048c33 <phase_3+49>
-   0x08048c2e <+44>:	call   0x80492a9 <explode_bomb>
-   0x08048c33 <+49>:	cmpl   $0x7,0x18(%esp)
+   0x08048c02 <+0> :	sub    $0x2c,%esp						# %esp -= 44
+   0x08048c05 <+3> :	lea    0x1c(%esp),%eax					# %eax = %esp + 28
+   0x08048c09 <+7> :	mov    %eax,0xc(%esp)					# *(%esp + 12) = %eax
+   0x08048c0d <+11>:	lea    0x18(%esp),%eax					# %eax = %esp + 24
+   0x08048c11 <+15>:	mov    %eax,0x8(%esp)					# *(%esp + 8) = %eax
+   0x08048c15 <+19>:	movl   $0x804a6a9,0x4(%esp)				# *(%esp + 4) = 0x804a6a9
+   0x08048c1d <+27>:	mov    0x30(%esp),%eax					# %eax = *(%esp + 30)
+   0x08048c21 <+31>:	mov    %eax,(%esp)						# *(%esp) = %eax
+   0x08048c24 <+34>:	call   0x8048860 <__isoc99_sscanf@plt>	# scanf
+   0x08048c29 <+39>:	cmp    $0x1,%eax						# if (1 > %eax) then
+   0x08048c2c <+42>:	jg     0x8048c33 <phase_3+49>			# go to +49
+   0x08048c2e <+44>:	call   0x80492a9 <explode_bomb>			# explode_bomb
+   0x08048c33 <+49>:	cmpl   $0x7,0x18(%esp)					# if (*(%esp+24) 
    0x08048c38 <+54>:	ja     0x8048ca0 <phase_3+158>
    0x08048c3a <+56>:	mov    0x18(%esp),%eax
    0x08048c3e <+60>:	jmp    *0x804a464(,%eax,4)
@@ -386,11 +386,11 @@ phase_defused:
    0x080494fb <+195>:	ret
 
 main : 
-   0x08048a1d <+0>:	push   %ebp
-   0x08048a1e <+1>:	mov    %esp,%ebp
-   0x08048a20 <+3>:	push   %ebx
-   0x08048a21 <+4>:	and    $0xfffffff0,%esp
-   0x08048a24 <+7>:	sub    $0x10,%esp
+   0x08048a1d <+0> :	push   %ebp
+   0x08048a1e <+1> :	mov    %esp,%ebp
+   0x08048a20 <+3> :	push   %ebx
+   0x08048a21 <+4> :	and    $0xfffffff0,%esp
+   0x08048a24 <+7> :	sub    $0x10,%esp
    0x08048a27 <+10>:	mov    0x8(%ebp),%eax
    0x08048a2a <+13>:	mov    0xc(%ebp),%ebx
    0x08048a2d <+16>:	cmp    $0x1,%eax
