@@ -105,7 +105,13 @@ void MCopy (List Lin, List *Lout)
 /* F.S. Lout berisi salinan dari Lin */
 /* Proses : menyalin Lin ke Lout */
 {
-	*Lout = Lin;
+	if(IsEmpty(Lin))
+		return Nil;
+	else{
+		List Ltemp;
+		Mcopy(Tail(Lin), &Ltemp);
+		*Lout = Konso(FirstElmt(Lin),Ltemp);
+	}
 }
 
 List Concat (List L1, List L2)
@@ -125,7 +131,7 @@ void MConcat (List L1, List L2, List *LHsl)
 /* Proses : Menghasilkan salinan hasil konkatenasi list L1 dan L2 */
 {
 	if(IsEmpty(L1))
-		*LHsl = L2;
+		*LHsl = Copy(L2);
 	else{
 		List Ltemp;
 		MConcat(Tail(L1), L2, &Ltemp);
