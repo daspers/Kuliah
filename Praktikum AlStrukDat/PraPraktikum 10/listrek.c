@@ -106,7 +106,7 @@ void MCopy (List Lin, List *Lout)
 /* Proses : menyalin Lin ke Lout */
 {
 	if(IsEmpty(Lin))
-		return Nil;
+		*Lout = Nil;
 	else{
 		List Ltemp;
 		Mcopy(Tail(Lin), &Ltemp);
