@@ -11,7 +11,7 @@ Deskripsi		:
 #include <math.h>
 
 int i;
-char c, s[500];
+char s[500];
 
 BinTree BuildBalancedTree(int N){
 	BinTree P,L,R;
@@ -41,7 +41,7 @@ BinTree BuildBalancedTree(int N){
 			a = -6;
 		}
 		else{
-			a = c-48;
+			a = c-'0';
 		}
 		i++;
 		P = AlokNode(a);
@@ -84,7 +84,16 @@ void hitung(BinTree *T){
 	}
 }
 
-void PPrintPostorder (BinTree P){
+void PPrintPostorder (BinTree P)
+/* I.S. P terdefinisi */
+/* F.S. Semua simpul P sudah dicetak secara postorder: pohon kiri, pohon kanan, dan akar. 
+   Setiap pohon ditandai dengan tanda kurung buka dan kurung tutup (). 
+   Pohon kosong ditandai dengan ().
+   Tidak ada tambahan karakter apa pun di depan, tengah, atau akhir. */
+/* Contoh: 
+   (()()A) adalah pohon dengan 1 elemen dengan akar A
+   ((()()B)(()()C)A) adalah pohon dengan akar A dan subpohon kiri (()()B) dan subpohon kanan (()()C) */
+{
 	if(IsTreeEmpty(P));
 	else{
 		PPrintPostorder(Left(P));
@@ -108,12 +117,8 @@ void PPrintPostorder (BinTree P){
 
 int main(){
 	BinTree T = Nil;
-	int n=0;
-	while(scanf("%c", &c), c!='\n'){
-		s[n]=c;
-		n++;
-	}
-	if(n==0){
+	fgets(s, 500, stdin);
+	if(s[0]=='\n'||s[0]=='\0'){
 		printf("Ekspresi kosong\n");
 	}
 	else{
