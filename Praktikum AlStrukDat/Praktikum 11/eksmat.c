@@ -22,27 +22,20 @@ BinTree BuildBalancedTree(int N){
 		return Nil;
 	else{
 		c = s[i];
-		if(c=='+'){
+		if(c=='+')
 			a = -2;
-		}
-		else if(c=='-'){
+		else if(c=='-')
 			a = -1;
-		}
-		else if(c=='*'){
+		else if(c=='*')
 			a = -3;
-		}
-		else if(c=='/'){
+		else if(c=='/')
 			a = -4;
-		}
-		else if(c=='^'){
+		else if(c=='^')
 			a = -5;
-		}
-		else if(c=='%'){
+		else if(c=='%')
 			a = -6;
-		}
-		else{
+		else
 			a = c-'0';
-		}
 		i++;
 		P = AlokNode(a);
 		if(P!=Nil){
@@ -63,7 +56,7 @@ BinTree BuildBalancedTree(int N){
 
 void hitung(BinTree *T){
 	if(IsTreeEmpty(*T));
-	if(Akar(*T)<0){
+	else if(Akar(*T)<0){
 		BinTree l,r;
 		l = Left(*T);
 		r = Right(*T);
@@ -85,14 +78,6 @@ void hitung(BinTree *T){
 }
 
 void PPrintPostorder (BinTree P)
-/* I.S. P terdefinisi */
-/* F.S. Semua simpul P sudah dicetak secara postorder: pohon kiri, pohon kanan, dan akar. 
-   Setiap pohon ditandai dengan tanda kurung buka dan kurung tutup (). 
-   Pohon kosong ditandai dengan ().
-   Tidak ada tambahan karakter apa pun di depan, tengah, atau akhir. */
-/* Contoh: 
-   (()()A) adalah pohon dengan 1 elemen dengan akar A
-   ((()()B)(()()C)A) adalah pohon dengan akar A dan subpohon kiri (()()B) dan subpohon kanan (()()C) */
 {
 	if(IsTreeEmpty(P));
 	else{
