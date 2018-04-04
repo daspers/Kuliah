@@ -16,7 +16,7 @@ public class CompositeService extends AbstractService{
 	public void removeService(AbstractService a){
 		if(super.getServiceState() != STATE.DIE){
 			for(int i=0;i<serviceList.size();i++){
-				if(a.toString() == serviceList.get(i).toString()){
+				if(a.toString().equals(serviceList.get(i).toString())){
 					serviceList.remove(i);
 					return;
 				}
